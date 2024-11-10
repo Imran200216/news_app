@@ -5,6 +5,7 @@ import 'package:news_app/components/custom_password_text_field.dart';
 import 'package:news_app/components/custom_text_btn.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/screens/auth_screen/sign_up_screen.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -159,7 +160,12 @@ class SignInScreen extends StatelessWidget {
                   ),
                   CustomTextBtn(
                     btnTitle: "Sign Up",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return const SignUpScreen();
+                      }));
+                    },
                   ),
                 ],
               ),
