@@ -45,6 +45,14 @@ dependencies:
   awesome_snackbar_content: ^0.1.4
   shared_preferences: ^2.3.3
   provider: ^6.1.2
+  firebase_auth: ^5.3.2
+  firebase_core: ^3.7.0
+  uuid: ^4.5.1
+  share_plus: ^10.1.2
+  flutter_tts: ^4.1.0
+
+
+
 
 dev_dependencies:
   flutter_test:
