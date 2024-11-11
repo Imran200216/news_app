@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app/provider/bottom_nav_provider.dart';
+import 'package:news_app/provider/category_chip_provider.dart';
 import 'package:news_app/provider/topic_provider.dart';
 import 'package:news_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,11 @@ class MyApp extends StatelessWidget {
           /// topic provider
           ChangeNotifierProvider(
             create: (context) => TopicsProvider(),
+          ),
+
+          /// category provider
+          ChangeNotifierProvider(
+            create: (context) => CategoryChipProvider(),
           ),
         ],
         builder: (context, child) {

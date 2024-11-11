@@ -4,6 +4,7 @@ import 'package:news_app/constants/colors.dart';
 class CustomTextField extends StatelessWidget {
   final String hintText;
   final IconData prefixIcon;
+  final IconData? suffixIcon; // Optional suffix icon
   final TextEditingController? controller;
   final TextInputType keyboardType;
 
@@ -11,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.prefixIcon,
+    this.suffixIcon, // Not required
     this.controller,
     required this.keyboardType,
   });
@@ -40,6 +42,13 @@ class CustomTextField extends StatelessWidget {
             prefixIcon,
             color: AppColors.hintTextFieldColor,
           ),
+          suffixIcon: suffixIcon != null
+              ? Icon(
+                  suffixIcon,
+                  color: AppColors.hintTextFieldColor,
+                )
+              : null,
+          // Only show suffix icon if provided
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 15.0,

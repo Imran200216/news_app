@@ -9,4 +9,6 @@ class AppColors {
   static const Color textFieldBgColor = Color(0xFFF3F4F6);
   static const Color profileListTileColor = Color(0xFFF3F4F6);
   static const Color profileListTileTextColor = Color(0xFF666C8E);
+  static const Color categoryHomeChipBgColor = Color(0xFFF3F4F6);
+  static const Color categoryHomeChipTextColor = Color(0xFF7C82A1);
 }
