@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_app/provider/auth_provider/email_auth_provider.dart';
+import 'package:news_app/provider/auth_provider/google_auth_provider.dart';
 import 'package:news_app/provider/bottom_nav_provider.dart';
 import 'package:news_app/provider/carousel_provider.dart';
 import 'package:news_app/provider/category_chip_provider.dart';
@@ -43,6 +45,16 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => NewsProvider(),
           ),
+
+          /// google auth Provider
+          ChangeNotifierProvider(
+            create: (context) => GoogleAuthenticationProvider(),
+          ),
+
+          /// email auth provider
+          ChangeNotifierProvider(
+            create: (context) => EmailAuthenticationProvider(),
+          )
         ],
         builder: (context, child) {
           return MaterialApp(

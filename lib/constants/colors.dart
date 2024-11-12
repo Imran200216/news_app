@@ -11,4 +11,6 @@ class AppColors {
   static const Color profileListTileTextColor = Color(0xFF666C8E);
   static const Color categoryHomeChipBgColor = Color(0xFFF3F4F6);
   static const Color categoryHomeChipTextColor = Color(0xFF7C82A1);
+  static Color successToastColor = const Color(0xFF02A75A);
+  static Color failureToastColor = const Color(0xFFD92F54);
 }
