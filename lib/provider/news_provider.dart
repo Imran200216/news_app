@@ -8,6 +8,7 @@ class NewsProvider extends ChangeNotifier {
 
   NewsProvider() {
     fetchNewsPosts();
+    fetchEverythingFromAPI();
   }
 
   List<dynamic> get posts => _posts;
@@ -47,5 +48,32 @@ class NewsProvider extends ChangeNotifier {
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
+  }
+
+  final String newsAppEveryThing =
+      "https://newsapi.org/v2/everything?q=bitcoin&apiKey=40480e0644cf484fbf0dab7b2d9766e5";
+
+  /// fetching all poost
+  // Fetch news posts from the API
+  Future<void> fetchEverythingFromAPI() async {
+    _setLoading(true);
+    try {
+      final response = await Dio().get(
+        newsAppAPIKey,
+      );
+
+      // Ensure response data format matches expectations
+      if (response.data['articles'] != null) {
+        _posts = response.data['articles'];
+      } else {
+        _errorMessage = "No articles found";
+      }
+
+      _errorMessage = null; // reset error message if successful
+    } catch (e) {
+      _errorMessage = "Failed to load news posts: $e";
+    } finally {
+      _setLoading(false);
+    }
   }
 }

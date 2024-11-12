@@ -1,9 +1,22 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/components/custom_cached_network_image.dart';
 import 'package:news_app/constants/colors.dart';
 
 class NewsDescriptionScreen extends StatelessWidget {
-  const NewsDescriptionScreen({super.key});
+  final String newsImgUrl;
+  final String newsTitle;
+  final String newsDescription;
+  final String newsByAuthor;
+  final String newsContent;
+
+  const NewsDescriptionScreen({
+    super.key,
+    required this.newsImgUrl,
+    required this.newsTitle,
+    required this.newsDescription,
+    required this.newsByAuthor,
+    required this.newsContent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +74,17 @@ class NewsDescriptionScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 /// news image
-                Container(
-                  height: 280,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                          "https://plus.unsplash.com/premium_photo-1731329152944-6581e0e707b5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"),
-                      fit: BoxFit.cover,
-                    ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: CustomCachedImage(
+                    height: 280,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    imageUrl: newsImgUrl,
+                    errorIconSize: 20,
+                    errorIconColor: AppColors.primaryColor,
+                    loadingIconColor: AppColors.primaryColor,
+                    loadingIconSize: 20,
                   ),
                 ),
 
@@ -101,10 +115,10 @@ class NewsDescriptionScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 // Title
-                const Text(
+                Text(
                   textAlign: TextAlign.start,
-                  "Title",
-                  style: TextStyle(
+                  newsTitle,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     color: AppColors.titleTextColor,
                     fontSize: 24,
@@ -114,71 +128,23 @@ class NewsDescriptionScreen extends StatelessWidget {
                 const SizedBox(height: 20),
 
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// profile image
-                    Container(
-                      height: 70,
-                      width: 70,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: CachedNetworkImageProvider(
-                            "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(
-                          color: AppColors.primaryColor,
-                        ),
-                        errorWidget: (context, url, error) => const Icon(
-                          Icons.error,
-                          color: Colors.red,
-                        ),
+                    const Text(
+                      "Author - ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.subTitleTextColor,
+                        fontSize: 14,
                       ),
                     ),
-                    const SizedBox(
-                      width: 30,
-                    ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        /// person name
-                        Text(
-                          "Dev P",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.titleTextColor,
-                            fontSize: 18,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-
-                        /// person email address
-                        Text(
-                          "Designer",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.subTitleTextColor,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      newsByAuthor,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.titleTextColor,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -188,13 +154,13 @@ class NewsDescriptionScreen extends StatelessWidget {
                 ),
 
                 // Title
-                const Text(
+                Text(
                   textAlign: TextAlign.start,
-                  "Results",
-                  style: TextStyle(
+                  newsDescription,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     color: AppColors.titleTextColor,
-                    fontSize: 20,
+                    fontSize: 18,
                   ),
                 ),
 
@@ -203,13 +169,13 @@ class NewsDescriptionScreen extends StatelessWidget {
                 ),
 
                 // sub title
-                const Text(
+                Text(
                   textAlign: TextAlign.start,
-                  '''The NewsDescriptionScreen in the app is designed to provide users with a clean and visually appealing interface to view news details. It features a full-width image at the top, presented within rounded corners to maintain a polished look. Directly below the image, a category chip—styled with a primary color background and contrasting secondary color text—adds context to the article’s theme, enhancing navigation and readability. The app bar includes intuitive icons for navigation, sharing, and bookmarking, allowing users to interact seamlessly with the news content. The overall layout is spacious, modern, and optimized for an engaging reading experience.''',
-                  style: TextStyle(
+                  newsContent,
+                  style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: AppColors.subTitleTextColor,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
               ],

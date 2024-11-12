@@ -4,6 +4,7 @@ import 'package:news_app/components/custom_cached_network_image.dart';
 import 'package:news_app/components/custom_news_card.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/provider/all_news_provider.dart';
 import 'package:news_app/provider/news_provider.dart';
 import 'package:news_app/screens/news_description_screen/news_description_screen.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Access provider
     final newsProvider = Provider.of<NewsProvider>(context);
+
+    /// all news provider
+    final allNewsProvider = Provider.of<AllNewsProvider>(context);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -202,7 +206,23 @@ class HomeScreen extends StatelessWidget {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
-                                return const NewsDescriptionScreen();
+                                return NewsDescriptionScreen(
+                                  newsImgUrl: newsProvider.posts[index]
+                                          ["urlToImage"] ??
+                                      "No image",
+                                  newsTitle: newsProvider.posts[index]
+                                          ['title'] ??
+                                      "No title",
+                                  newsDescription: newsProvider.posts[index]
+                                          ['description'] ??
+                                      "No Description",
+                                  newsByAuthor: newsProvider.posts[index]
+                                          ['author'] ??
+                                      "No author",
+                                  newsContent: newsProvider.posts[index]
+                                          ['content'] ??
+                                      "No content",
+                                );
                               },
                             ));
                           },
