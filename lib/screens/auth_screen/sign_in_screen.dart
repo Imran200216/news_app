@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/components/custom_btn.dart';
+import 'package:news_app/components/custom_loading_animation.dart';
 import 'package:news_app/components/custom_outlined_btn.dart';
 import 'package:news_app/components/custom_password_text_field.dart';
 import 'package:news_app/components/custom_text_btn.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/provider/auth_provider/email_auth_provider.dart';
+import 'package:news_app/provider/auth_provider/google_auth_provider.dart';
 import 'package:news_app/screens/auth_screen/sign_up_screen.dart';
+import 'package:provider/provider.dart';
 
-class SignInScreen extends StatelessWidget {
+ class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    /// auth provider (google auth provider)
+    final googleAuthProvider =
+        Provider.of<GoogleAuthenticationProvider>(context);
+
+    /// email auth provider
+    final emailAuthProvider = Provider.of<EmailAuthenticationProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.secondaryColor,
@@ -54,7 +65,8 @@ class SignInScreen extends StatelessWidget {
               ),
 
               /// email address text field
-              const CustomTextField(
+              CustomTextField(
+                controller: emailAuthProvider.loginEmailController,
                 hintText: "Email Address",
                 prefixIcon: Icons.email_outlined,
                 keyboardType: TextInputType.emailAddress,
@@ -64,7 +76,9 @@ class SignInScreen extends StatelessWidget {
                 height: 20,
               ),
 
-              const CustomPasswordTextField(
+              /// password text field
+              CustomPasswordTextField(
+                controller: emailAuthProvider.loginPasswordController,
                 hintText: "Password",
                 keyboardType: TextInputType.visiblePassword,
               ),
@@ -85,11 +99,20 @@ class SignInScreen extends StatelessWidget {
                 height: 20,
               ),
 
-              /// sign in btn
-              CustomBtn(
-                btnText: "Sign In",
-                onTap: () {},
-              ),
+              /// sign in btn email auth
+              emailAuthProvider.isLoading
+                  ? const Center(
+                      child: CustomLoadingAnimation(
+                        loadingColor: AppColors.primaryColor,
+                        loadingSize: 22,
+                      ),
+                    )
+                  : CustomBtn(
+                      btnText: "Sign In",
+                      onTap: () {
+                        emailAuthProvider.loginWithEmailPassword(context);
+                      },
+                    ),
 
               const SizedBox(
                 height: 22,
@@ -135,11 +158,21 @@ class SignInScreen extends StatelessWidget {
                 height: 22,
               ),
 
-              CustomOutlinedBtn(
-                iconName: "google-logo",
-                btnText: "Sign in with Google",
-                onTap: () {},
-              ),
+              /// sign in with google auth
+              googleAuthProvider.isLoading
+                  ? const Center(
+                      child: CustomLoadingAnimation(
+                        loadingColor: AppColors.primaryColor,
+                        loadingSize: 22,
+                      ),
+                    )
+                  : CustomOutlinedBtn(
+                      iconName: "google-logo",
+                      btnText: "Sign in with Google",
+                      onTap: () {
+                        googleAuthProvider.signInWithGoogle(context);
+                      },
+                    ),
 
               const SizedBox(
                 height: 22,

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "966584511720",
+    "project_id": "newshut-7e124",
+    "storage_bucket": "newshut-7e124.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966584511720:android:f8feb547cba01ecbd26d5d",
+        "android_client_info": {
+          "package_name": "com.newshunt.newsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966584511720-eav4dagga04roogpk5v7ajh5r6eq7daj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuO_Fvg5LmuNm6c80DXYpgwp_bwF5-vqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966584511720-eav4dagga04roogpk5v7ajh5r6eq7daj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,26 +1,39 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/components/custom_loading_animation.dart';
 import 'package:news_app/components/custom_profile_list_tile.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/provider/auth_provider/email_auth_provider.dart';
+import 'package:news_app/provider/auth_provider/google_auth_provider.dart';
 import 'package:news_app/screens/profile_sub_screen/terms_conditions_screen.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Current user
+    final user = FirebaseAuth.instance.currentUser;
+
+    // Google and email authentication providers
+    final googleAuthProvider =
+        Provider.of<GoogleAuthenticationProvider>(context);
+    final emailAuthProvider = Provider.of<EmailAuthenticationProvider>(context);
+
     return Scaffold(
       body: Container(
         margin: const EdgeInsets.only(
           left: 20,
           right: 20,
           bottom: 20,
-          top: 20,
+          top: 40,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// title
+            // Title
             const Text(
               "Profile",
               style: TextStyle(
@@ -29,70 +42,59 @@ class ProfileScreen extends StatelessWidget {
                 fontSize: 24,
               ),
             ),
-            const SizedBox(
-              height: 12,
-            ),
+            const SizedBox(height: 12),
 
             Row(
               children: [
-                /// profile image
-                Container(
-                  height: 100,
-                  width: 100,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: CachedNetworkImageProvider(
-                        "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: CachedNetworkImage(
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
+                // Profile image
+                user?.photoURL == null
+                    ? const SizedBox()
+                    : Container(
+                        height: 100,
+                        width: 100,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: CachedNetworkImage(
+                          imageUrl: user!.photoURL!,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(
+                            color: AppColors.primaryColor,
+                          ),
+                          errorWidget: (context, url, error) => const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          ),
                         ),
                       ),
-                    ),
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(
-                      color: AppColors.primaryColor,
-                    ),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.error,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                const Column(
+                const SizedBox(width: 30),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// person name
+                    // Person name
                     Text(
-                      "Dev P",
-                      style: TextStyle(
+                      user?.displayName ?? "No name found",
+                      style: const TextStyle(
                         fontWeight: FontWeight.w900,
                         color: AppColors.titleTextColor,
                         fontSize: 18,
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
+                    const SizedBox(height: 8),
 
-                    /// person email address
+                    // Person email address
                     Text(
-                      "dev@gmail.com",
-                      style: TextStyle(
+                      user?.email ?? "No email address found",
+                      style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         color: AppColors.subTitleTextColor,
                         fontSize: 14,
@@ -103,9 +105,7 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(
-              height: 50,
-            ),
+            const SizedBox(height: 50),
 
             CustomProfileListTile(
               titleText: "Terms & Conditions",
@@ -113,24 +113,40 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) {
-                      return const TermsConditionsScreen();
-                    },
+                    builder: (context) => const TermsConditionsScreen(),
                   ),
                 );
               },
               iconData: Icons.arrow_forward_ios,
             ),
 
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
 
-            CustomProfileListTile(
-              titleText: "Sign Out",
-              onTap: () {},
-              iconData: Icons.logout,
-            ),
+            user?.email?.isEmpty ?? true
+                ? emailAuthProvider.isLoading
+                    ? const CustomLoadingAnimation(
+                        loadingColor: AppColors.primaryColor,
+                        loadingSize: 22,
+                      )
+                    : CustomProfileListTile(
+                        titleText: "Sign Out",
+                        onTap: () {
+                          emailAuthProvider.signOutWithEmail(context);
+                        },
+                        iconData: Icons.logout,
+                      )
+                : googleAuthProvider.isLoading
+                    ? const CustomLoadingAnimation(
+                        loadingColor: AppColors.primaryColor,
+                        loadingSize: 22,
+                      )
+                    : CustomProfileListTile(
+                        titleText: "Sign Out",
+                        onTap: () {
+                          googleAuthProvider.signOut(context);
+                        },
+                        iconData: Icons.logout,
+                      ),
           ],
         ),
       ),

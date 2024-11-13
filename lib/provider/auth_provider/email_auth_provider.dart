@@ -5,6 +5,7 @@ import 'package:news_app/helper/debounce_helper.dart';
 import 'package:news_app/helper/toast_helper.dart';
 import 'package:news_app/modals/user_modals.dart';
 import 'package:news_app/screens/bottom_nav.dart';
+import 'package:news_app/screens/favorite_topics_screen.dart';
 import 'package:news_app/screens/get_started_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -132,14 +133,9 @@ class EmailAuthenticationProvider extends ChangeNotifier {
               context: context, message: "Registration Successful!");
         }
 
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   MaterialPageRoute(
-        //       builder: (context) => EmailUserAvatarScreen(
-        //         userId: emailUser.uid,
-        //       )),
-        //       (Route<dynamic> route) => false,
-        // );
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const FavoriteTopicsScreen();
+        }));
       }
     } on FirebaseAuthException catch (e) {
       _errorMessage = e.message ?? "An error occurred";
@@ -215,7 +211,6 @@ class EmailAuthenticationProvider extends ChangeNotifier {
     }
   }
 
-  /// Sign out functionality
   /// Sign out functionality
   Future<void> signOutWithEmail(BuildContext context) async {
     try {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/components/cusotm_category_chip.dart';
-import 'package:news_app/components/custom_cached_network_image.dart';
+import 'package:news_app/components/custom_headline_card.dart';
 import 'package:news_app/components/custom_news_card.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// Access provider
+    /// headlines provider
     final newsProvider = Provider.of<NewsProvider>(context);
 
     /// all news provider
@@ -88,91 +88,50 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Featured News Carousel
-              SizedBox(
+              Container(
+                clipBehavior: Clip.none,
                 height: 257,
-                child: ListView.builder(
+                child: ListView.separated(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: 4,
+                  itemCount: newsProvider.posts.length,
                   itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 14),
-                      child: SizedBox(
-                        width: 257,
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: const CustomCachedImage(
-                                height: 257,
-                                width: 257,
-                                fit: BoxFit.cover,
-                                imageUrl:
-                                    "https://plus.unsplash.com/premium_photo-1672423154405-5fd922c11af2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                                errorIconSize: 20,
-                                errorIconColor: AppColors.primaryColor,
-                                loadingIconColor: AppColors.primaryColor,
-                                loadingIconSize: 20,
-                              ),
-                            ),
-                            Container(
-                              height: 257,
-                              width: 257,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.black.withOpacity(0.4),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              top: 6,
-                              right: 6,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.bookmark_border_outlined,
-                                  size: 32,
-                                  color: AppColors.secondaryColor,
-                                ),
-                              ),
-                            ),
-                            const Positioned(
-                              bottom: 50,
-                              left: 30,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "POLITICS",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      wordSpacing: 4,
-                                      color: AppColors.secondaryColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    "Politics",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      wordSpacing: 4,
-                                      color: AppColors.secondaryColor,
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                    /// headline card
+                    return CustomHeadlineCard(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) { 
+                              return NewsDescriptionScreen(
+                                newsImgUrl: newsProvider.posts[index]
+                                        ['urlToImage'] ??
+                                    "No image",
+                                newsTitle: newsProvider.posts[index]['title'] ??
+                                    "No title",
+                                newsDescription: newsProvider.posts[index]
+                                        ['description'] ??
+                                    "No description",
+                                newsByAuthor: newsProvider.posts[index]
+                                        ['author'] ??
+                                    "No author",
+                                newsContent: newsProvider.posts[index]
+                                        ['content'] ??
+                                    "No content",
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      imageUrl:
+                          newsProvider.posts[index]["urlToImage"] ?? "No image",
+                      chipLabel: newsProvider.posts[index]["source"]["name"] ??
+                          "No chips",
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(
+                      width: 20,
                     );
                   },
                 ),
@@ -198,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     )
                   : ListView.builder(
-                      itemCount: newsProvider.posts.length,
+                      itemCount: allNewsProvider.posts.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
@@ -207,28 +166,32 @@ class HomeScreen extends StatelessWidget {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
                                 return NewsDescriptionScreen(
-                                  newsImgUrl: newsProvider.posts[index]
+                                  newsImgUrl: allNewsProvider.posts[index]
                                           ["urlToImage"] ??
                                       "No image",
-                                  newsTitle: newsProvider.posts[index]
+                                  newsTitle: allNewsProvider.posts[index]
                                           ['title'] ??
                                       "No title",
-                                  newsDescription: newsProvider.posts[index]
+                                  newsDescription: allNewsProvider.posts[index]
                                           ['description'] ??
                                       "No Description",
-                                  newsByAuthor: newsProvider.posts[index]
+                                  newsByAuthor: allNewsProvider.posts[index]
                                           ['author'] ??
                                       "No author",
-                                  newsContent: newsProvider.posts[index]
+                                  newsContent: allNewsProvider.posts[index]
                                           ['content'] ??
                                       "No content",
                                 );
                               },
                             ));
                           },
-                          title: newsProvider.posts[index]['title'],
-                          subtitle: newsProvider.posts[index]['description'],
-                          imageUrl: newsProvider.posts[index]['urlToImage'] ??
+                          title: allNewsProvider.posts[index]['title'] ??
+                              "No Title",
+                          subtitle: allNewsProvider.posts[index]
+                                  ['description'] ??
+                              "No Description",
+                          imageUrl: allNewsProvider.posts[index]
+                                  ['urlToImage'] ??
                               "No image",
                         );
                       },

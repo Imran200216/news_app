@@ -23,11 +23,11 @@ class CustomINewsCard extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Card(
+          shadowColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           color: const Color(0xFFE9EDFE),
-          elevation: 5,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(

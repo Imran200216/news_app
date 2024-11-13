@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
         child: const Center(
           child: Text(
-            "News",
+            "NewsHunt",
             style: TextStyle(
               fontWeight: FontWeight.w700,
               color: AppColors.secondaryColor,

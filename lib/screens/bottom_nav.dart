@@ -33,75 +33,73 @@ class BottomNavBar extends StatelessWidget {
               return true;
             }
           },
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: AppColors.secondaryColor,
+          child: Scaffold(
+            backgroundColor: AppColors.secondaryColor,
 
-              /// Bottom navigation bar
-              bottomNavigationBar: BottomNavigationBar(
-                onTap: (index) {
-                  bottomNavProvider.setIndex(index);
-                },
-                backgroundColor: AppColors.primaryColor,
-                currentIndex: bottomNavProvider.currentIndex,
-                selectedItemColor: AppColors.primaryColor,
-                unselectedItemColor: AppColors.subTitleTextColor,
-                showSelectedLabels: false,
-                // Hide selected labels
-                showUnselectedLabels: false,
-                // Hide unselected labels
-                items: <BottomNavigationBarItem>[
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/svg/home-icon.svg',
-                      color: bottomNavProvider.currentIndex == 0
-                          ? AppColors.primaryColor
-                          : AppColors.subTitleTextColor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: 'Home',
+            /// Bottom navigation bar
+            bottomNavigationBar: BottomNavigationBar(
+              onTap: (index) {
+                bottomNavProvider.setIndex(index);
+              },
+              backgroundColor: AppColors.primaryColor,
+              currentIndex: bottomNavProvider.currentIndex,
+              selectedItemColor: AppColors.primaryColor,
+              unselectedItemColor: AppColors.subTitleTextColor,
+              showSelectedLabels: false,
+              // Hide selected labels
+              showUnselectedLabels: false,
+              // Hide unselected labels
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/images/svg/home-icon.svg',
+                    color: bottomNavProvider.currentIndex == 0
+                        ? AppColors.primaryColor
+                        : AppColors.subTitleTextColor,
+                    height: 24,
+                    width: 24,
                   ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/svg/category-icon.svg',
-                      color: bottomNavProvider.currentIndex == 1
-                          ? AppColors.primaryColor
-                          : AppColors.subTitleTextColor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: 'Category',
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/images/svg/category-icon.svg',
+                    color: bottomNavProvider.currentIndex == 1
+                        ? AppColors.primaryColor
+                        : AppColors.subTitleTextColor,
+                    height: 24,
+                    width: 24,
                   ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/svg/wishlist-icon.svg',
-                      color: bottomNavProvider.currentIndex == 2
-                          ? AppColors.primaryColor
-                          : AppColors.subTitleTextColor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: 'Wishlist',
+                  label: 'Category',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/images/svg/wishlist-icon.svg',
+                    color: bottomNavProvider.currentIndex == 2
+                        ? AppColors.primaryColor
+                        : AppColors.subTitleTextColor,
+                    height: 24,
+                    width: 24,
                   ),
-                  BottomNavigationBarItem(
-                    icon: SvgPicture.asset(
-                      'assets/images/svg/profile-icon.svg',
-                      color: bottomNavProvider.currentIndex == 3
-                          ? AppColors.primaryColor
-                          : AppColors.subTitleTextColor,
-                      height: 24,
-                      width: 24,
-                    ),
-                    label: 'Profile',
+                  label: 'Wishlist',
+                ),
+                BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    'assets/images/svg/profile-icon.svg',
+                    color: bottomNavProvider.currentIndex == 3
+                        ? AppColors.primaryColor
+                        : AppColors.subTitleTextColor,
+                    height: 24,
+                    width: 24,
                   ),
-                ],
-              ),
+                  label: 'Profile',
+                ),
+              ],
+            ),
 
-              body: IndexedStack(
-                index: bottomNavProvider.currentIndex,
-                children: widgetList,
-              ),
+            body: IndexedStack(
+              index: bottomNavProvider.currentIndex,
+              children: widgetList,
             ),
           ),
         );
