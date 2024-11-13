@@ -13,7 +13,7 @@ class WishlistScreen extends StatelessWidget {
           left: 20,
           right: 20,
           bottom: 20,
-          top: 20,
+          top: 40,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
