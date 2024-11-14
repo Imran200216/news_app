@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/screens/bottom_nav.dart';
 import 'package:news_app/screens/get_started_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,15 +15,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Set a timer of 5 seconds to navigate to the GetStartedScreen
-    Future.delayed(const Duration(seconds: 3), () {
+    _checkUserStatus();
+  }
+
+  Future<void> _checkUserStatus() async {
+    // Retrieve the login status from SharedPreferences
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+    // Delay for splash screen effect
+    await Future.delayed(const Duration(seconds: 3));
+
+    // Navigate based on login status
+    if (isLoggedIn) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) {
-          return const GetStartedScreen();
-        }),
+        MaterialPageRoute(builder: (context) => BottomNavBar()),
       );
-    });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const GetStartedScreen()),
+      );
+    }
   }
 
   @override

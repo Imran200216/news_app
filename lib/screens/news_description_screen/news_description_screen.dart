@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:news_app/components/custom_cached_network_image.dart';
 import 'package:news_app/constants/colors.dart';
+import 'package:news_app/provider/book_mark_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -39,6 +41,9 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /// book mark provider
+    final bookMarkProvider = Provider.of<BookMarkProvider>(context);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.secondaryColor,
@@ -84,17 +89,26 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
             ),
             const SizedBox(width: 8),
 
-            /// bookmark icon button
-            IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: const Icon(
-                Icons.bookmark_outline,
-                size: 24,
-                color: AppColors.subTitleTextColor,
-              ),
-            ),
+            // /// bookmark icon button
+            // IconButton(
+            //   onPressed: () {
+            //     final articleData = {
+            //       'newsImgUrl': widget.newsImgUrl,
+            //       'newsTitle': widget.newsTitle,
+            //       'newsDescription': widget.newsDescription,
+            //       'newsByAuthor': widget.newsByAuthor,
+            //       'newsContent': widget.newsContent,
+            //       'timestamp': FieldValue.serverTimestamp(),
+            //     };
+            //
+            //     bookMarkProvider.addBookmark(articleData, context);
+            //   },
+            //   icon: Icon(
+            //     bookMarkProvider.isBookmarked(articleId) ? Icons.bookmark : Icons.bookmark_border, // Change icon based on bookmarked state
+            //     size: 24,
+            //     color: bookMarkProvider.isBookmarked(articleId) ? Colors.blue : AppColors.subTitleTextColor, // Change color based on bookmarked state
+            //   ),
+            // ),
           ],
         ),
         body: SingleChildScrollView(

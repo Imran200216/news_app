@@ -59,12 +59,14 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 CustomPasswordTextField(
+                  fieldKey: "registerPassword",
                   controller: emailAuthProvider.registerPasswordController,
                   hintText: "Password",
                   keyboardType: TextInputType.visiblePassword,
                 ),
                 const SizedBox(height: 20),
                 CustomPasswordTextField(
+                  fieldKey: "registerConfirmPassword",
                   controller:
                       emailAuthProvider.registerConfirmPasswordController,
                   hintText: "Confirm Password",

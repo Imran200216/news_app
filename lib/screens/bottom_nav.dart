@@ -5,7 +5,6 @@ import 'package:news_app/provider/bottom_nav_provider.dart';
 import 'package:news_app/screens/bottom_nav_screens/category_screen.dart';
 import 'package:news_app/screens/bottom_nav_screens/home_screen.dart';
 import 'package:news_app/screens/bottom_nav_screens/profile_screen.dart';
-import 'package:news_app/screens/bottom_nav_screens/wishlist_screen.dart';
 import 'package:provider/provider.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -15,7 +14,6 @@ class BottomNavBar extends StatelessWidget {
   final List<Widget> widgetList = [
     const HomeScreen(),
     const CategoryScreen(),
-    const WishlistScreen(),
     const ProfileScreen(),
   ];
 
@@ -41,7 +39,7 @@ class BottomNavBar extends StatelessWidget {
               onTap: (index) {
                 bottomNavProvider.setIndex(index);
               },
-              backgroundColor: AppColors.primaryColor,
+              backgroundColor: AppColors.secondaryColor,
               currentIndex: bottomNavProvider.currentIndex,
               selectedItemColor: AppColors.primaryColor,
               unselectedItemColor: AppColors.subTitleTextColor,
@@ -70,23 +68,12 @@ class BottomNavBar extends StatelessWidget {
                     height: 24,
                     width: 24,
                   ),
-                  label: 'Category',
-                ),
-                BottomNavigationBarItem(
-                  icon: SvgPicture.asset(
-                    'assets/images/svg/wishlist-icon.svg',
-                    color: bottomNavProvider.currentIndex == 2
-                        ? AppColors.primaryColor
-                        : AppColors.subTitleTextColor,
-                    height: 24,
-                    width: 24,
-                  ),
-                  label: 'Wishlist',
+                  label: 'Headline',
                 ),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(
                     'assets/images/svg/profile-icon.svg',
-                    color: bottomNavProvider.currentIndex == 3
+                    color: bottomNavProvider.currentIndex == 2
                         ? AppColors.primaryColor
                         : AppColors.subTitleTextColor,
                     height: 24,

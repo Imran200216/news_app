@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/components/cusotm_category_chip.dart';
-import 'package:news_app/components/custom_headline_card.dart';
 import 'package:news_app/components/custom_news_card.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
@@ -9,8 +7,22 @@ import 'package:news_app/provider/news_provider.dart';
 import 'package:news_app/screens/news_description_screen/news_description_screen.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // TextEditingController for search input
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose(); // Dispose the controller to avoid memory leaks
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +31,16 @@ class HomeScreen extends StatelessWidget {
 
     /// all news provider
     final allNewsProvider = Provider.of<AllNewsProvider>(context);
+
+    // Filter the news articles based on search query
+    List filteredNews = allNewsProvider.posts.where((article) {
+      return article['title']
+              .toLowerCase()
+              .contains(_searchController.text.toLowerCase()) ||
+          article['description']
+              .toLowerCase()
+              .contains(_searchController.text.toLowerCase());
+    }).toList();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -53,90 +75,17 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 30),
 
               // Search TextField
-              const CustomTextField(
+              CustomTextField(
+                controller: _searchController,
                 hintText: "Search",
                 prefixIcon: Icons.search,
                 keyboardType: TextInputType.text,
+                onChanged: (query) {
+                  setState(() {}); // Refresh the UI when search text changes
+                },
               ),
-              const SizedBox(height: 20),
 
-              // Categories Chips
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CustomCategoryChip(label: "Sports"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Nation"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Gaming"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Politics"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Technology"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Entertainment"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Health"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Science"),
-                    SizedBox(width: 8),
-                    CustomCategoryChip(label: "Business"),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Featured News Carousel
-              Container(
-                clipBehavior: Clip.none,
-                height: 257,
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: newsProvider.posts.length,
-                  itemBuilder: (context, index) {
-                    /// headline card
-                    return CustomHeadlineCard(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) { 
-                              return NewsDescriptionScreen(
-                                newsImgUrl: newsProvider.posts[index]
-                                        ['urlToImage'] ??
-                                    "No image",
-                                newsTitle: newsProvider.posts[index]['title'] ??
-                                    "No title",
-                                newsDescription: newsProvider.posts[index]
-                                        ['description'] ??
-                                    "No description",
-                                newsByAuthor: newsProvider.posts[index]
-                                        ['author'] ??
-                                    "No author",
-                                newsContent: newsProvider.posts[index]
-                                        ['content'] ??
-                                    "No content",
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      imageUrl:
-                          newsProvider.posts[index]["urlToImage"] ?? "No image",
-                      chipLabel: newsProvider.posts[index]["source"]["name"] ??
-                          "No chips",
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(
-                      width: 20,
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
               // Recommended News
               const Text(
@@ -156,46 +105,44 @@ class HomeScreen extends StatelessWidget {
                         color: AppColors.primaryColor,
                       ),
                     )
-                  : ListView.builder(
-                      itemCount: allNewsProvider.posts.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return CustomINewsCard(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return NewsDescriptionScreen(
-                                  newsImgUrl: allNewsProvider.posts[index]
-                                          ["urlToImage"] ??
-                                      "No image",
-                                  newsTitle: allNewsProvider.posts[index]
-                                          ['title'] ??
-                                      "No title",
-                                  newsDescription: allNewsProvider.posts[index]
-                                          ['description'] ??
-                                      "No Description",
-                                  newsByAuthor: allNewsProvider.posts[index]
-                                          ['author'] ??
-                                      "No author",
-                                  newsContent: allNewsProvider.posts[index]
-                                          ['content'] ??
-                                      "No content",
-                                );
+                  : filteredNews.isEmpty
+                      ? const Center(child: Text("No results found"))
+                      : ListView.builder(
+                          itemCount: filteredNews.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return CustomINewsCard(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return NewsDescriptionScreen(
+                                      newsImgUrl: filteredNews[index]
+                                              ["urlToImage"] ??
+                                          "No image",
+                                      newsTitle: filteredNews[index]['title'] ??
+                                          "No title",
+                                      newsDescription: filteredNews[index]
+                                              ['description'] ??
+                                          "No Description",
+                                      newsByAuthor: filteredNews[index]
+                                              ['author'] ??
+                                          "No author",
+                                      newsContent: filteredNews[index]
+                                              ['content'] ??
+                                          "No content",
+                                    );
+                                  },
+                                ));
                               },
-                            ));
+                              title: filteredNews[index]['title'] ?? "No Title",
+                              subtitle: filteredNews[index]['description'] ??
+                                  "No Description",
+                              imageUrl: filteredNews[index]['urlToImage'] ??
+                                  "No image",
+                            );
                           },
-                          title: allNewsProvider.posts[index]['title'] ??
-                              "No Title",
-                          subtitle: allNewsProvider.posts[index]
-                                  ['description'] ??
-                              "No Description",
-                          imageUrl: allNewsProvider.posts[index]
-                                  ['urlToImage'] ??
-                              "No image",
-                        );
-                      },
-                    ),
+                        ),
             ],
           ),
         ),

@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final IconData? suffixIcon; // Optional suffix icon
   final TextEditingController? controller;
   final TextInputType keyboardType;
+  final Function(String)? onChanged;
 
   const CustomTextField({
     super.key,
@@ -15,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.suffixIcon, // Not required
     this.controller,
     required this.keyboardType,
+    this.onChanged,
   });
 
   @override
@@ -22,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(12.0),
       child: TextField(
+        onChanged: onChanged,
         style: const TextStyle(
           fontWeight: FontWeight.w600,
           fontSize: 15,

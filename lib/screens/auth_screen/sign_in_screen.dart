@@ -11,7 +11,7 @@ import 'package:news_app/provider/auth_provider/google_auth_provider.dart';
 import 'package:news_app/screens/auth_screen/sign_up_screen.dart';
 import 'package:provider/provider.dart';
 
- class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
@@ -26,183 +26,186 @@ import 'package:provider/provider.dart';
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.secondaryColor,
-        body: Container(
-          margin: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: 20,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// title
-              const Text(
-                "Welcome Back 👋",
-                style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.titleTextColor,
-                  fontSize: 24,
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: 20,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// title
+                const Text(
+                  "Welcome Back 👋",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.titleTextColor,
+                    fontSize: 24,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-
-              /// sub title
-              const Text(
-                textAlign: TextAlign.start,
-                "I am happy to see you again. You can continue where you left off by logging in!",
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.subTitleTextColor,
-                  fontSize: 16,
+                const SizedBox(
+                  height: 12,
                 ),
-              ),
 
-              const SizedBox(
-                height: 20,
-              ),
-
-              /// email address text field
-              CustomTextField(
-                controller: emailAuthProvider.loginEmailController,
-                hintText: "Email Address",
-                prefixIcon: Icons.email_outlined,
-                keyboardType: TextInputType.emailAddress,
-              ),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              /// password text field
-              CustomPasswordTextField(
-                controller: emailAuthProvider.loginPasswordController,
-                hintText: "Password",
-                keyboardType: TextInputType.visiblePassword,
-              ),
-
-              const SizedBox(
-                height: 20,
-              ),
-
-              Align(
-                alignment: Alignment.topRight,
-                child: CustomTextBtn(
-                  btnTitle: "Forget Password?",
-                  onTap: () {},
+                /// sub title
+                const Text(
+                  textAlign: TextAlign.start,
+                  "I am happy to see you again. You can continue where you left off by logging in!",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.subTitleTextColor,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
 
-              const SizedBox(
-                height: 20,
-              ),
+                const SizedBox(
+                  height: 20,
+                ),
 
-              /// sign in btn email auth
-              emailAuthProvider.isLoading
-                  ? const Center(
-                      child: CustomLoadingAnimation(
-                        loadingColor: AppColors.primaryColor,
-                        loadingSize: 22,
+                /// email address text field
+                CustomTextField(
+                  controller: emailAuthProvider.loginEmailController,
+                  hintText: "Email Address",
+                  prefixIcon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                /// password text field
+                CustomPasswordTextField(
+                  fieldKey: "loginPassword",
+                  controller: emailAuthProvider.loginPasswordController,
+                  hintText: "Password",
+                  keyboardType: TextInputType.visiblePassword,
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                Align(
+                  alignment: Alignment.topRight,
+                  child: CustomTextBtn(
+                    btnTitle: "Forget Password?",
+                    onTap: () {},
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 20,
+                ),
+
+                /// sign in btn email auth
+                emailAuthProvider.isLoading
+                    ? const Center(
+                        child: CustomLoadingAnimation(
+                          loadingColor: AppColors.primaryColor,
+                          loadingSize: 22,
+                        ),
+                      )
+                    : CustomBtn(
+                        btnText: "Sign In",
+                        onTap: () {
+                          emailAuthProvider.loginWithEmailPassword(context);
+                        },
                       ),
-                    )
-                  : CustomBtn(
-                      btnText: "Sign In",
+
+                const SizedBox(
+                  height: 22,
+                ),
+
+                const Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        thickness: 1.2,
+                        color: AppColors.subTitleTextColor,
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: 6,
+                    ),
+
+                    /// sub title
+                    Text(
+                      textAlign: TextAlign.center,
+                      "Or",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.subTitleTextColor,
+                        fontSize: 16,
+                      ),
+                    ),
+
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Expanded(
+                      child: Divider(
+                        thickness: 1.2,
+                        color: AppColors.subTitleTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(
+                  height: 22,
+                ),
+
+                /// sign in with google auth
+                googleAuthProvider.isLoading
+                    ? const Center(
+                        child: CustomLoadingAnimation(
+                          loadingColor: AppColors.primaryColor,
+                          loadingSize: 22,
+                        ),
+                      )
+                    : CustomOutlinedBtn(
+                        iconName: "google-logo",
+                        btnText: "Sign in with Google",
+                        onTap: () {
+                          googleAuthProvider.signInWithGoogle(context);
+                        },
+                      ),
+
+                const SizedBox(
+                  height: 22,
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                      textAlign: TextAlign.center,
+                      "Don't have an account?",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.subTitleTextColor,
+                        fontSize: 16,
+                      ),
+                    ),
+                    CustomTextBtn(
+                      btnTitle: "Sign Up",
                       onTap: () {
-                        emailAuthProvider.loginWithEmailPassword(context);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return const SignUpScreen();
+                        }));
                       },
                     ),
-
-              const SizedBox(
-                height: 22,
-              ),
-
-              const Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      thickness: 1.2,
-                      color: AppColors.subTitleTextColor,
-                    ),
-                  ),
-
-                  SizedBox(
-                    width: 6,
-                  ),
-
-                  /// sub title
-                  Text(
-                    textAlign: TextAlign.center,
-                    "Or",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.subTitleTextColor,
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Expanded(
-                    child: Divider(
-                      thickness: 1.2,
-                      color: AppColors.subTitleTextColor,
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(
-                height: 22,
-              ),
-
-              /// sign in with google auth
-              googleAuthProvider.isLoading
-                  ? const Center(
-                      child: CustomLoadingAnimation(
-                        loadingColor: AppColors.primaryColor,
-                        loadingSize: 22,
-                      ),
-                    )
-                  : CustomOutlinedBtn(
-                      iconName: "google-logo",
-                      btnText: "Sign in with Google",
-                      onTap: () {
-                        googleAuthProvider.signInWithGoogle(context);
-                      },
-                    ),
-
-              const SizedBox(
-                height: 22,
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    textAlign: TextAlign.center,
-                    "Don't have an account?",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.subTitleTextColor,
-                      fontSize: 16,
-                    ),
-                  ),
-                  CustomTextBtn(
-                    btnTitle: "Sign Up",
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) {
-                        return const SignUpScreen();
-                      }));
-                    },
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,32 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/components/custom_headline_card.dart';
 import 'package:news_app/constants/colors.dart';
-import 'package:news_app/provider/topic_provider.dart';
+import 'package:news_app/provider/news_provider.dart';
+import 'package:news_app/screens/news_description_screen/news_description_screen.dart';
 import 'package:provider/provider.dart';
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({super.key});
 
-  /// Chips topics
-  final List<String> topics = const [
-    '🏈   Sports',
-    '⚖️   Politics',
-    '🌞   Life',
-    '🎮   Gaming',
-    '🐻   Animals',
-    '🌴   Nature',
-    '🍔   Food',
-    '🎨   Art',
-    '📜   History',
-    '👗   Fashion',
-    '😷   Covid-19',
-    '⚔️   Middle East',
-  ];
-
   @override
   Widget build(BuildContext context) {
-    /// topic provider
-    final topicsProvider = Provider.of<TopicsProvider>(context);
-
+    /// headlines provider
+    final newsProvider = Provider.of<NewsProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -35,7 +20,7 @@ class CategoryScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Select your favorite topics",
+                "Today's Headline news",
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   color: AppColors.titleTextColor,
@@ -43,37 +28,53 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 12),
-              const Text(
-                "Select some of your favorite topics to let us suggest better news for you.",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.subTitleTextColor,
-                  fontSize: 16,
+
+              // Wrap GridView.builder with an Expanded widget to fix overflow
+              Expanded(
+                child: GridView.builder(
+                  // GridView.builder will automatically handle scrolls
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Adjust this for the number of columns
+                    crossAxisSpacing: 10, // Space between columns
+                    mainAxisSpacing: 10, // Space between rows
+                    childAspectRatio:
+                        0.7, // Adjust the aspect ratio of each item
+                  ),
+                  itemCount: newsProvider.posts.length,
+                  itemBuilder: (context, index) {
+                    return CustomHeadlineCard(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return NewsDescriptionScreen(
+                                newsImgUrl: newsProvider.posts[index]
+                                        ['urlToImage'] ??
+                                    "No image",
+                                newsTitle: newsProvider.posts[index]['title'] ??
+                                    "No title",
+                                newsDescription: newsProvider.posts[index]
+                                        ['description'] ??
+                                    "No description",
+                                newsByAuthor: newsProvider.posts[index]
+                                        ['author'] ??
+                                    "No author",
+                                newsContent: newsProvider.posts[index]
+                                        ['content'] ??
+                                    "No content",
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      imageUrl:
+                          newsProvider.posts[index]["urlToImage"] ?? "No image",
+                      chipLabel: newsProvider.posts[index]["source"]["name"] ??
+                          "No chips",
+                    );
+                  },
                 ),
-              ),
-              const SizedBox(height: 40),
-              Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: topics.map((topic) {
-                  final isSelected = topicsProvider.isSelected(topic);
-                  return ChoiceChip(
-                    label: Text(
-                      topic,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black,
-                      ),
-                    ),
-                    selected: isSelected,
-                    selectedColor: Colors.blue,
-                    checkmarkColor: Colors.white,
-                    // Set tick color to white
-                    onSelected: (bool selected) {
-                      topicsProvider.toggleTopicSelection(topic);
-                    },
-                  );
-                }).toList(),
               ),
             ],
           ),

@@ -10,6 +10,7 @@ import 'package:news_app/provider/bottom_nav_provider.dart';
 import 'package:news_app/provider/carousel_provider.dart';
 import 'package:news_app/provider/category_chip_provider.dart';
 import 'package:news_app/provider/news_provider.dart';
+import 'package:news_app/provider/password_visibility_provider.dart';
 import 'package:news_app/provider/topic_provider.dart';
 import 'package:news_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,11 @@ class MyApp extends StatelessWidget {
           /// book mark provider
           ChangeNotifierProvider(
             create: (context) => BookMarkProvider(),
+          ),
+
+          /// password visibility provider
+          ChangeNotifierProvider(
+            create: (context) => PasswordVisibilityProvider(),
           ),
         ],
         builder: (context, child) {

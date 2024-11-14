@@ -53,16 +53,13 @@ class BookMarkProvider extends ChangeNotifier {
   }
 
   // Add an article to bookmarks and persist it in Firestore with debounce
-  Future<void> addBookmark(Map<String, dynamic> articleData, BuildContext context) async {
-    if (_debounceHelper.isDebounced()) return; // Return if debounce is active
+  Future<void> addBookmark(String articleId, BuildContext context) async {
+    if (_debounceHelper.isDebounced()) return;
 
-    _debounceHelper.activateDebounce(duration: const Duration(seconds: 2)); // Activate debounce for 2 seconds
+    _debounceHelper.activateDebounce(duration: const Duration(seconds: 2));
 
     User? user = _auth.currentUser;
     if (user != null) {
-      // Generate unique articleId if not already present
-      String articleId = articleData['articleId'] ?? const Uuid().v4();
-
       // Check if the article is already bookmarked
       if (_bookmarkedArticleIds.contains(articleId)) {
         ToastHelper.showSuccessToast(
@@ -72,19 +69,16 @@ class BookMarkProvider extends ChangeNotifier {
         return;
       }
 
-      // Add the articleId to the list of bookmarked articles
-      _bookmarkedArticleIds.add(articleId);
+      // Generate unique articleId if not already present
+      String uniqueArticleId = const Uuid().v4();
+
+      // Add the unique articleId to the list of bookmarked articles
+      _bookmarkedArticleIds.add(uniqueArticleId);
 
       // Persist the bookmark in Firestore
       await FirebaseFirestore.instance.collection('bookmarks').add({
         "userUid": user.uid,
-        "articleId": articleId,
-        "newsTitle": articleData['newsTitle'],
-        "newsDescription": articleData['newsDescription'],
-        "newsImgUrl": articleData['newsImgUrl'],
-        "newsByAuthor": articleData['newsByAuthor'],
-        "newsContent": articleData['newsContent'],
-        "timestamp": FieldValue.serverTimestamp(),
+        "articleId": uniqueArticleId,
       });
 
       // Show success toast
@@ -96,7 +90,6 @@ class BookMarkProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
 
   // Remove an article from bookmarks and update Firestore with debounce
   Future<void> removeBookmark(String articleId, BuildContext context) async {
