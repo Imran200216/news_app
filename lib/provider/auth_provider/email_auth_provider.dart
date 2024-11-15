@@ -5,9 +5,7 @@ import 'package:news_app/helper/debounce_helper.dart';
 import 'package:news_app/helper/toast_helper.dart';
 import 'package:news_app/modals/user_modals.dart';
 import 'package:news_app/screens/bottom_nav.dart';
-import 'package:news_app/screens/favorite_topics_screen.dart';
 import 'package:news_app/screens/get_started_screen.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EmailAuthenticationProvider extends ChangeNotifier {
@@ -133,8 +131,8 @@ class EmailAuthenticationProvider extends ChangeNotifier {
               context: context, message: "Registration Successful!");
         }
 
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const FavoriteTopicsScreen();
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+          return  BottomNavBar();
         }));
       }
     } on FirebaseAuthException catch (e) {

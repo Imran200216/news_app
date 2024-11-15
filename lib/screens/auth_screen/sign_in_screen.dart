@@ -120,65 +120,6 @@ class SignInScreen extends StatelessWidget {
                   height: 22,
                 ),
 
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 1.2,
-                        color: AppColors.subTitleTextColor,
-                      ),
-                    ),
-
-                    SizedBox(
-                      width: 6,
-                    ),
-
-                    /// sub title
-                    Text(
-                      textAlign: TextAlign.center,
-                      "Or",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.subTitleTextColor,
-                        fontSize: 16,
-                      ),
-                    ),
-
-                    SizedBox(
-                      width: 6,
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 1.2,
-                        color: AppColors.subTitleTextColor,
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(
-                  height: 22,
-                ),
-
-                /// sign in with google auth
-                googleAuthProvider.isLoading
-                    ? const Center(
-                        child: CustomLoadingAnimation(
-                          loadingColor: AppColors.primaryColor,
-                          loadingSize: 22,
-                        ),
-                      )
-                    : CustomOutlinedBtn(
-                        iconName: "google-logo",
-                        btnText: "Sign in with Google",
-                        onTap: () {
-                          googleAuthProvider.signInWithGoogle(context);
-                        },
-                      ),
-
-                const SizedBox(
-                  height: 22,
-                ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
