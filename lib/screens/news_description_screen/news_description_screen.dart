@@ -9,6 +9,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 
 class NewsDescriptionScreen extends StatefulWidget {
+  final String newsChip;
   final String newsImgUrl;
   final String newsTitle;
   final String newsDescription;
@@ -22,6 +23,7 @@ class NewsDescriptionScreen extends StatefulWidget {
     required this.newsDescription,
     required this.newsByAuthor,
     required this.newsContent,
+    required this.newsChip,
   });
 
   @override
@@ -42,8 +44,6 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
       appBar: AppBar(
@@ -97,7 +97,8 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
           IconButton(
             onPressed: () {
               _speak(
-                  widget.newsContent); // Call the speak function when pressed
+                widget.newsContent,
+              ); // Call the speak function when pressed
             },
             icon: const Icon(
               Icons.multitrack_audio,
@@ -131,16 +132,16 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
               const SizedBox(height: 20), // Add space between image and chip
 
               /// Chip with background color and text color from AppColors
-              const Chip(
+              Chip(
                 label: Text(
-                  'Politics', // Example category
-                  style: TextStyle(
+                  widget.newsChip,
+                  style: const TextStyle(
                     color: AppColors.secondaryColor,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),
                 ),
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(30),
                   ),
@@ -149,7 +150,8 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
                   ),
                 ),
                 backgroundColor: AppColors.primaryColor, // Background color
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               ),
               const SizedBox(height: 20),
 
@@ -192,6 +194,7 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
               Text(
                 textAlign: TextAlign.start,
                 widget.newsDescription,
+                softWrap: true,
                 style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   color: AppColors.titleTextColor,
@@ -204,6 +207,7 @@ class _NewsDescriptionScreenState extends State<NewsDescriptionScreen> {
               Text(
                 textAlign: TextAlign.start,
                 widget.newsContent,
+                softWrap: true,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                   color: AppColors.subTitleTextColor,

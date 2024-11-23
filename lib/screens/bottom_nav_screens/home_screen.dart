@@ -117,6 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) {
                                     return NewsDescriptionScreen(
+                                      newsChip: filteredNews[index]['source']
+                                              ['name'] ??
+                                          "No chip",
                                       newsImgUrl: filteredNews[index]
                                               ["urlToImage"] ??
                                           "No image",

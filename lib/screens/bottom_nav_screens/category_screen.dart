@@ -49,6 +49,7 @@ class CategoryScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) {
                               return NewsDescriptionScreen(
+                                newsChip: newsProvider.posts[index]['source']['name'],
                                 newsImgUrl: newsProvider.posts[index]
                                         ['urlToImage'] ??
                                     "No image",
