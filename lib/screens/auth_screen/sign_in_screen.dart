@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/components/custom_btn.dart';
 import 'package:news_app/components/custom_loading_animation.dart';
-import 'package:news_app/components/custom_outlined_btn.dart';
 import 'package:news_app/components/custom_password_text_field.dart';
 import 'package:news_app/components/custom_text_btn.dart';
 import 'package:news_app/components/custom_text_field.dart';
 import 'package:news_app/constants/colors.dart';
 import 'package:news_app/provider/auth_provider/email_auth_provider.dart';
 import 'package:news_app/provider/auth_provider/google_auth_provider.dart';
+import 'package:news_app/screens/auth_screen/forget_password_screen.dart';
 import 'package:news_app/screens/auth_screen/sign_up_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -93,7 +93,13 @@ class SignInScreen extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: CustomTextBtn(
                     btnTitle: "Forget Password?",
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          return const ForgetPasswordScreen();
+                        },
+                      ));
+                    },
                   ),
                 ),
 
@@ -119,7 +125,6 @@ class SignInScreen extends StatelessWidget {
                 const SizedBox(
                   height: 22,
                 ),
-
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,

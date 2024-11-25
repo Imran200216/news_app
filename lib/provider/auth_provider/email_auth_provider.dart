@@ -131,8 +131,9 @@ class EmailAuthenticationProvider extends ChangeNotifier {
               context: context, message: "Registration Successful!");
         }
 
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
-          return  BottomNavBar();
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return BottomNavBar();
         }));
       }
     } on FirebaseAuthException catch (e) {
@@ -242,5 +243,43 @@ class EmailAuthenticationProvider extends ChangeNotifier {
   Future<bool> isUserEmailLoggedIn() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLoggedIn') ?? false; // Return false if not found
+  }
+
+  final TextEditingController forgetPasswordEmailController =
+      TextEditingController();
+
+  /// Reset password functionality
+  Future<void> resetPassword(BuildContext context) async {
+    _isLoading = true;
+
+    try {
+      await _auth
+          .sendPasswordResetEmail(
+              email: forgetPasswordEmailController.text.trim())
+          .then((value) {
+        forgetPasswordEmailController.clear();
+
+        // Check for debouncing
+        if (!debounceHelper.isDebounced()) {
+          debounceHelper.activateDebounce(duration: const Duration(seconds: 2));
+          ToastHelper.showSuccessToast(
+              context: context,
+              message: "Password reset link sent! Check your email");
+        }
+
+        // Pushing back
+        Navigator.pop(context);
+      });
+    } catch (e) {
+      // Check for debouncing for error toast as well
+      if (!debounceHelper.isDebounced()) {
+        debounceHelper.activateDebounce(duration: const Duration(seconds: 2));
+        ToastHelper.showErrorToast(
+            context: context,
+            message: "Failed to send reset link. Try again later.");
+      }
+    } finally {
+      _isLoading = false; // Stop loading
+    }
   }
 }
